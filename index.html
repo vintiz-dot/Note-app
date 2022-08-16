@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="note app" />
+    <meta name="author" content="victor" />
+
+    <title>Signin Page</title>
+
+    <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    <link href="signin.css" rel="stylesheet" />
+    <script defer src="script.js"></script>
+  </head>
+  <div class="overlay hidden"></div>
+  <body class="text-center app-body">
+    <main style="padding-top: 50px">
+      <div class="flex-container" id="signin-login">
+        <div class="flex-child magenta">
+          <section id="login-page">
+            <form>
+              <img class="mb-4" src="sign.jpg" alt="" width="72" height="57" />
+              <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+              <div class="form-floating">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="sign-inUsername"
+                  placeholder="name@example.com"
+                />
+                <label for="floatingInput">Email address</label>
+              </div>
+              <div class="form-floating">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="sign-inPassword"
+                  placeholder="Password"
+                />
+                <label for="floatingPassword">Password</label>
+              </div>
+
+              <button
+                class="login-btn w-100 btn btn-lg btn-primary"
+                type="submit"
+                id="signin"
+              >
+                Sign in
+              </button>
+            </form>
+          </section>
+        </div>
+
+        <div class="flex-child green">
+          <section id="sign-up-page">
+            <form>
+              <img class="mb-4" src="sign.jpg" alt="" width="72" height="57" />
+              <h1 class="h3 mb-3 fw-normal">Please sign Up</h1>
+
+              <div class="form-floating">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="floatingSignupInput"
+                  placeholder="name@example.com"
+                />
+                <label for="floatingInput">Email address</label>
+              </div>
+              <div class="form-floating">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="floatingSignupPassword"
+                  placeholder="Password"
+                />
+                <label for="floatingPassword">Password</label>
+              </div>
+
+              <button
+                class="login-btn w-100 btn btn-lg btn-primary"
+                type="submit"
+                id="signup"
+              >
+                Sign Up
+              </button>
+            </form>
+          </section>
+        </div>
+      </div>
+
+      <div
+        style="width: 100%"
+        id="privateClass"
+        class="hidden private-container"
+      >
+        <div
+          style="
+            background-color: white;
+            margin-bottom: 20px;
+            margin-top: 0%;
+            padding-top: 0%;
+          "
+        >
+          <button class="close-modal">&times;</button>
+          <div class="container">
+            <h2
+              style="
+                font-size: 36px;
+                color: #5fcf80;
+                font-weight: 600;
+                font-family: Poppins, sans-serif;
+              "
+            >
+              Edit Post
+            </h2>
+          </div>
+          <div>
+            <input id="new-title" type="text" placeholder="Enter Post Title" />
+            <textarea
+              placeholder="Enter your Note here"
+              name="post-msg"
+              id="post-edit-msg"
+              cols="30"
+              rows="10"
+            ></textarea>
+            <button
+              class="btn btn-outline-dark"
+              id="edit-post-btn"
+              type="submit"
+            >
+              Edit Post
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+    <section id="user-page" class="hidden">
+      <div class="container py-4">
+        <header class="pb-3 mb-4 border-bottom">
+          <span class="fs-4">My Notes</span>
+        </header>
+
+        <div id="note-head"></div>
+
+        <div class="row align-items-md-stretch" id="note-body"></div>
+      </div>
+    </section>
+  </body>
+
+  <footer class="pt-3 mt-4 text-muted border-top">Victor &copy; 2022</footer>
+</html>
