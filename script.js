@@ -3,7 +3,7 @@
 const login = document.querySelector(".login-btn");
 const signUp = document.getElementById("signup");
 const userPage = document.getElementById("user-page");
-const loginPage = document.getElementById("login-page");
+
 const NewUser = document.getElementById("new-user");
 
 const noteHead = document.getElementById("note-head");
@@ -92,12 +92,11 @@ class App {
     c.preventDefault();
     const username = document.getElementById("sign-inUsername").value;
     const password = document.getElementById("sign-inPassword").value;
-    // const username = ""; //text content
-    //
-    // if (!_findUser(username)) {
-    //   alert("user not found");
-    //   return;
-    // }
+
+    if (!_findUser(username)) {
+      alert("user not found");
+      return;
+    }
     // loginPage.classList.add("hidden");
     userPage.classList.remove("hidden");
     // this.activeUser = this._findUser(username);
@@ -125,9 +124,8 @@ class App {
     logOut.addEventListener("click", this._logOut.bind(this));
   }
   _addNewUser(user) {
-    // this.#users.push(user);
-    // let username; //text value
-    // let password; //text value
+    // const username; //text value
+    // const password; //text value
     // if (isNaN(username) || username === undefined || username === null) return;
     // NewUser.addEventListener("click", function (x) {
     // const user = new User(username, password);
