@@ -29,10 +29,43 @@
     <link href="signin.css" rel="stylesheet" />
     <script defer src="script.js"></script>
   </head>
+
+  <nav
+    class="navbar navbar-light fixed-top hidden"
+    style="margin-top: 2%"
+    id="nav-bar"
+  >
+    <form class="container-fluid justify-content-start">
+      <div class="position-absolute top-0 start-0">
+        <!-- <button type="button"> -->
+
+        <button
+          id="create-post!"
+          class="navbar-brand btn btn-outline-primary me-2 bg-light"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarTogglerDemo01"
+          aria-controls="navbarTogglerDemo01"
+          aria-expanded="true"
+          aria-label="Toggle navigation"
+        >
+          Create Post
+        </button>
+      </div>
+      <button
+        id="log-out"
+        class="btn btn-outline-danger position-absolute top-0 end-0 bg-warning"
+        type="button"
+      >
+        LOGOUT
+      </button>
+    </form>
+  </nav>
+
   <div class="overlay hidden"></div>
   <body class="text-center app-body">
     <main style="padding-top: 50px">
-      <div class="flex-container" id="signin-login">
+      <div class="container col-lg-3 col-md-4 col-sm-8" id="signin-login">
         <div class="flex-child magenta">
           <section id="login-page">
             <form>
@@ -69,7 +102,7 @@
           </section>
         </div>
 
-        <div class="flex-child green">
+        <div class="flex-child green hidden">
           <section id="sign-up-page">
             <form>
               <img class="mb-4" src="sign.jpg" alt="" width="72" height="57" />
@@ -146,7 +179,57 @@
               id="edit-post-btn"
               type="submit"
             >
-              Edit Post
+              Submit Post
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        style="width: 100%"
+        id="create-post-window"
+        class="hidden private-container"
+      >
+        <div
+          style="
+            background-color: white;
+            margin-bottom: 20px;
+            margin-top: 0%;
+            padding-top: 0%;
+          "
+        >
+          <button id="close-create-modal">&times;</button>
+          <div class="container">
+            <h2
+              style="
+                font-size: 36px;
+                color: #5fcf80;
+                font-weight: 600;
+                font-family: Poppins, sans-serif;
+              "
+            >
+              Create Post
+            </h2>
+          </div>
+          <div>
+            <input
+              id="create-title"
+              type="text"
+              placeholder="Enter Post Title"
+            />
+            <textarea
+              placeholder="Enter your Note here"
+              name="post-msg"
+              id="post-create-msg"
+              cols="30"
+              rows="10"
+            ></textarea>
+            <button
+              class="btn btn-outline-dark"
+              id="create-post-btn!"
+              type="submit"
+            >
+              Submit Post
             </button>
           </div>
         </div>
