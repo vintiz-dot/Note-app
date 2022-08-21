@@ -176,14 +176,21 @@
             </h2>
           </div>
           <div>
-            <input id="new-title" type="text" placeholder="Enter Post Title" />
+            <input
+              class="form-control"
+              id="new-title"
+              type="text"
+              placeholder="Enter Post Title"
+            /><br /><br />
             <textarea
+              class="form-control"
               placeholder="Enter your Note here"
               name="post-msg"
               id="post-edit-msg"
               cols="30"
               rows="10"
-            ></textarea>
+            ></textarea
+            ><br /><br />
             <button
               class="btn btn-outline-dark"
               id="edit-post-btn"
@@ -201,6 +208,7 @@
         class="hidden private-container"
       >
         <div
+          class="cl-lg-8"
           style="
             background-color: white;
             margin-bottom: 20px;
@@ -208,7 +216,7 @@
             padding-top: 0%;
           "
         >
-          <button id="close-create-modal">&times;</button>
+          <button class="close-modal" id="close-create-modal">&times;</button>
           <div class="container">
             <h2
               style="
@@ -222,18 +230,22 @@
             </h2>
           </div>
           <div>
+            <br /><br />
             <input
+              class="form-control"
               id="create-title"
               type="text"
               placeholder="Enter Post Title"
             />
-            <textarea
+            <br /><br /><textarea
+              class="form-control"
               placeholder="Enter your Note here"
               name="post-msg"
               id="post-create-msg"
               cols="30"
               rows="10"
-            ></textarea>
+            ></textarea
+            ><br /><br />
             <button
               class="btn btn-outline-dark"
               id="create-post-btn!"

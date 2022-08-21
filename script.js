@@ -251,14 +251,11 @@ class App {
     this.#displayPosts();
   }
   // ***************END OF DELETE POST METHOD************************
-  /**
-   *
-   *
+  /**   *   *
    *
    *
    * =================>END OF MAIN FUNCTIONS<========================
-   *
-   *
+   *   *
    *
    */
 
@@ -328,15 +325,17 @@ class App {
 
   #closeModalCreatePost() {
     const modal = document.getElementById("close-create-modal");
-    modal.addEventListener("click", function (x) {
-      x.preventDefault();
-      const newPostWindow = document.getElementById("create-post-window");
-      newPostWindow.classList.add("hidden");
-      this.#overlay.classList.add("hidden");
-    });
+    modal.addEventListener("click", this.#closewindow.bind(this));
   }
 
   //END OF CREATE POST HELPER FUNCTIONS
+
+  #closewindow(x) {
+    x.preventDefault();
+
+    this.newPostWindow.classList.add("hidden");
+    this.#overlay.classList.add("hidden");
+  }
 
   _clearValues() {
     document.getElementById("post-create-msg").value = "";
@@ -437,34 +436,4 @@ class App {
     });
   }
 }
-
 const app = new App();
-// const test = new User("username", "password");
-// app._addNewUser(test);
-
-// test.createPost(
-//   "1st The fundamentals of Js",
-//   `Long ass post. 1. Commonwealth Scholarships in the UK are funded by the UK Department for International Development (DFID). An important selection criterion is the potential contribution that you will make to international development if you are awarded a scholarship. Provide a Development Impact statement in 4 parts explaining:
-// 1. How your proposed study relates to:
-// a) Development issues at the global, National and Local level:
-// b) Development issues connected to you chosen CSC theme and the wider sector?
-
-// (200 words) but 236 (Need to cut down to 200)
-
-// `
-// );
-
-// test.createPost(
-//   "post 2",
-//   `As the world steers in the direction of sustainable development to end all forms of hunger and malnutrition by 2030, I am concerned that my country, Nigeria is lagging behind and may not be able to reach this goal by 2030 as it is faced with severe sustainability issues such as environmental degradation, drought and biodiversity losses. The need to address the challenges of food insecurity in recent times calls for the prompt implementation of effective and efficient sustainability measures. Generally, food is a vital need for survival. Hence, the agricultural industry plays an essential role in ensuring that such demand is met through promoting sustainable agriculture, supporting small-scale farmers and equal access to land, technology and markets. According to Food and Agriculture Organization, 9.6 million people in Nigeria faced worse levels of hunger and food losses account for one- third of global food production. Furthermore, this estimation of food insecurity is equivalent to 1.3 billion tons of food losses in the world. These statistics are saddening and therefore raise the moral question of injustice to the affected nations as many human beings, especially in Nigeria, are dying of hunger and malnutrition.`
-// );
-
-// test.createPost(
-//   "test post3",
-//   `To attain SDG 1, 2, and 13, the importance of carrying out cutting-edge researches in search of the optimal solution to the indefatigable problem of food insecurity cannot be overemphasized.
-// 2. How you intend to apply your new skills and qualification when you return home? (100 words)
-// Research skills acquired during my Master’s program will be used to contribute extensively to literatures on food security by delving into critical issues such as human exploitation of the Earth’s resources, poverty alleviation, the ecological basis for sustainable agricultural development while incorporating risk and sustainability strategies. At the same time, a compromise will be made between environmentally sound solutions and risk reduction techniques. `
-// );
-
-// const test1 = new User("towel", "pass");
-// app._addNewUser(test1);
