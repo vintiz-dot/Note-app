@@ -1,145 +1,247 @@
 "use strict";
 
-const login = document.querySelector(".login-btn");
-const signUp = document.getElementById("signup");
-const userPage = document.getElementById("user-page");
-
 const NewUser = document.getElementById("new-user");
-
 const noteHead = document.getElementById("note-head");
 const noteBody = document.getElementById("note-body");
-
 const privateContainer = document.getElementById("privateClass");
 const editPost = document.getElementById("edit-post-btn");
 let target;
 
-// creating new user
 class User {
   #password;
   #username;
-  #notesContainer;
-  #postId = 0;
+  notesContainer;
   #id;
+  postId = 0;
   constructor(username, password) {
     this.#username = username;
     this.#password = password;
     this.#id = +JSON.stringify(new Date().getTime()).slice(4, -1);
-    this.#notesContainer = [];
-  }
-  get notes() {
-    return this.#notesContainer;
-  }
-  get id() {
-    return this.#id;
-  }
-  get username() {
-    return this.#username;
-  }
-  _submitPost(post) {
-    this.#notesContainer.push(post);
-  }
-  _postTime() {
-    return `${new Date().toDateString()} at ${new Date().toLocaleTimeString()}`;
-  }
-  createPost(title, post) {
-    if (post === "" || title === "") return;
+    this.notesContainer = [];
+    Object.defineProperty(this, "password", {
+      enumerable: true,
+      get: function () {
+        return this.#password;
+      },
+    });
 
-    const newPost = {
-      author: this.username,
-      title: title,
-      msg: post,
-      postId: this.#postId,
-      time: this._postTime(),
-    };
-    this.#postId += 1;
-    this._submitPost(newPost);
-    console.log("note", this.notes);
-    return newPost;
-  }
+    Object.defineProperty(this, "username", {
+      enumerable: true,
+      get: function () {
+        return this.#username;
+      },
+    });
 
-  findPost(postId) {
-    return this.#notesContainer.find((post) => post.postId === postId);
-  }
+    Object.defineProperty(this, "notes", {
+      enumerable: true,
+      get: function () {
+        return this.notesContainer;
+      },
+    });
 
-  deletePost(postId) {
-    this.notes.splice(this.findPost(postId).pospostId, 1);
+    Object.defineProperty(this, "id", {
+      enumerable: true,
+      get: function () {
+        return this.#id;
+      },
+    });
   }
 }
-
+// let username;
+// let password;
 class App {
+  #invalid_login = document.getElementById("invalid-id");
+  #invalid = document.getElementById("invalid-id-");
+  #login = document.querySelector(".login-btn");
+  #overlay = document.querySelector(".overlay");
+  #body = document.querySelector(".app-body");
+  #logOutbtn = document.getElementById("log-out");
+  #siginPage = document.getElementById("login-page");
+  #signupPage = document.getElementById("sign-up-page");
+  #userPage = document.getElementById("user-page");
+  #signUp = document.getElementById("signup");
   #btnSubmit = document.getElementById("create-post-btn!");
   newPostWindow = document.getElementById("create-post-window");
-  overlay = document.querySelector(".overlay");
-  #body = document.querySelector(".app-body");
   #landingPage = document.getElementById("signin-login");
   #navBar = document.getElementById("nav-bar");
   #users = [];
-  activeUser;
+  #activeUserPost = [];
+  #activeUser;
+
   constructor() {
-    this.#btnSubmit.addEventListener("click", this._createPost_.bind(this));
-    this._loginUser();
-    this.editpost();
-    this.#deletePost();
-    this.#logoutUser();
+    this.#updateUsers();
     this.#createPost();
+    this.#loadSignupPage();
+    this.#body.addEventListener("click", this.#editPost.bind(this));
+    this.#body.addEventListener("click", this.#deletePost.bind(this));
+    this.#logOutbtn.addEventListener("click", this.#logOut.bind(this));
+    this.#login.addEventListener("click", this._initialize.bind(this));
+    this.#signUp.addEventListener("click", this._addNewUser.bind(this));
+    this.#btnSubmit.addEventListener("click", this._createPost_.bind(this));
+  }
+
+  #createNewPost(title, post) {
+    if (post === "" || title === "") return;
+
+    const newPost = {
+      author: this.#activeUser.username,
+      title: title,
+      msg: post,
+      time: this.#setPostTime(),
+      postId: this.#activeUser.postId,
+    };
+    this.#activeUser.postId += 1;
+    this.#submitPost(newPost);
+
+    return newPost;
+  }
+  #findPost(postId) {
+    return this.#activeUserPost.find((post) => post.postId === postId);
+  }
+  #setPostTime() {
+    return `${new Date().toDateString()} at ${new Date().toLocaleTimeString()}`;
+  }
+  #submitPost(post) {
+    this.#activeUserPost.push(post);
+    this.#activeUser.notesContainer.push(post);
+    localStorage.setItem(
+      this.#activeUser.username,
+      JSON.stringify(this.#activeUserPost)
+    );
+  }
+
+  #updateUsers() {
+    const users = JSON.parse(localStorage.getItem("users"));
+    if (!users) return;
+    users.forEach((user) => this.#users.push(user));
   }
   _findUser(username) {
     return this.#users.filter((user) => user.username === username).length === 0
-      ? alert(`NO USER FOUND`)
+      ? false
       : this.#users.filter((user) => user.username === username);
   }
-  _initialize(c) {
-    c.preventDefault();
-    const username = document.getElementById("sign-inUsername").value;
-    const password = document.getElementById("sign-inPassword").value;
 
-    if (!_findUser(username)) {
-      alert("user not found");
-      return;
-    }
-    // loginPage.classList.add("hidden");
-    userPage.classList.remove("hidden");
-    // this.activeUser = this._findUser(username);
-    this.activeUser = this._findUser(username)[0];
-    // introduce log out button again
+  #rebuildOldPosts() {
+    const data = JSON.parse(localStorage.getItem(this.#activeUser.username));
+    if (!data) return;
+    data.forEach((postObj) => this.#activeUserPost.push(postObj));
+  }
+  #setupDisplay() {
     this.#landingPage.classList.add("hidden");
-    // console.clear();
-    this._displayPosts();
-    // this._update();
+    this.#userPage.classList.remove("hidden");
     this.#navBar.classList.remove("hidden");
   }
 
-  _loginUser() {
-    login.addEventListener("click", this._initialize.bind(this));
-  }
-  _logOut() {
-    this.activeUser = null;
-    this.#navBar.classList.add("hidden");
-    this._clearnotes();
-    this.#landingPage.classList.remove("hidden");
+  _initialize(c) {
+    c.preventDefault();
+
+    const username = document.getElementById("sign-inUsername");
+    const password = document.getElementById("sign-inPassword");
+
+    this.#invalid_login?.classList.add("hidden");
+
+    //check if the username exists
+    if (!this._findUser(username.value)) {
+      this.#invalid_login.classList.remove("hidden");
+      username = password = "";
+      return;
+    }
+
+    const user = this._findUser(username.value)[0];
+
+    // check if the username and pass words match
+    if (user.password != password.value) {
+      this.#invalid_login.classList.remove("hidden");
+      username.value = password.value = " ";
+      return;
+    }
+
+    // logged in, setup display
+
+    username.value = password.value = "";
+    this.#activeUser = user;
+    this.#setupDisplay();
+    this.#rebuildOldPosts();
+    this.#displayPosts();
   }
 
-  #logoutUser() {
-    const logOut = document.getElementById("log-out");
-    logOut.addEventListener("click", this._logOut.bind(this));
+  #logOut() {
+    // deactivate the active user
+    this.#activeUser = null;
+    this.#activeUserPost = [];
+    this._clearnotes();
+    // turn off the display
+    this.#navBar.classList.add("hidden");
+    this.#landingPage.classList.remove("hidden");
+    this.#siginPage.classList.remove("hidden");
+    this.#signupPage.classList.add("hidden");
+    this.#invalid.classList.add("hidden");
   }
-  _addNewUser(user) {
-    // const username; //text value
-    // const password; //text value
-    // if (isNaN(username) || username === undefined || username === null) return;
-    // NewUser.addEventListener("click", function (x) {
-    // const user = new User(username, password);
+
+  #loadSignupPage() {
+    const btnSignUp = document.getElementById("offer-sign-up");
+    btnSignUp.addEventListener("click", this._loadSignUP.bind(this));
+  }
+  _loadSignUP(x) {
+    x.preventDefault();
+    this.#siginPage.classList.add("hidden");
+    this.#signupPage.classList.remove("hidden");
+  }
+  #invalidMsg(msg) {
+    this.#invalid.innerHTML = "";
+    this.#invalid.classList.remove("hidden");
+    this.#invalid.insertAdjacentText("beforeend", msg);
+  }
+
+  _addNewUser(x) {
+    x.preventDefault();
+
+    // collect entires
+    username = document.getElementById("Signup-username").value;
+    password = document.getElementById("SignupPassword").value;
+
+    // gaurd for valid inputs
+    if (
+      username === NaN ||
+      username === undefined ||
+      username === null ||
+      password.length < 7
+    ) {
+      this.#invalidMsg("invaid entries");
+      return;
+    }
+
+    // reserved username
+    if (username.toLowerCase() === "towel") {
+      this.#invalidMsg(`Boss that username is reserved 😂😂😂😂`);
+      return;
+    }
+
+    // check for existing username
+    if (this._findUser(username)) {
+      this.#invalidMsg(`Username already exists`);
+      return;
+    }
+
+    // initialize user and setup display
+    const user = new User(username, password);
     this.#users.push(user);
-    // });
+    this.#activeUser = user;
+    this.#setupDisplay();
+    username = password = this.#invalid.innerHTML = "";
+    this.#displayPosts();
+
+    // update local storage
+    localStorage.setItem("users", [JSON.stringify(this.#users)]);
   }
+
   #closeModalCreatePost() {
     const modal = document.getElementById("close-create-modal");
     modal.addEventListener("click", function (x) {
       x.preventDefault();
       const newPostWindow = document.getElementById("create-post-window");
-      const overlay = document.querySelector(".overlay");
       newPostWindow.classList.add("hidden");
-      overlay.classList.add("hidden");
+      this.#overlay.classList.add("hidden");
     });
   }
   #createPost() {
@@ -155,10 +257,10 @@ class App {
     x.preventDefault();
     let newtext = document.getElementById("post-create-msg").value;
     let newTitle = document.getElementById("create-title").value;
-    this.activeUser.createPost(newTitle, newtext);
-    this._displayPosts("afterbegin");
+    this.#createNewPost(newTitle, newtext);
+    this.#displayPosts("afterbegin");
     this.newPostWindow.classList.add("hidden");
-    this.overlay.classList.add("hidden");
+    this.#overlay.classList.add("hidden");
     newtext = "";
     newTitle = "";
     return;
@@ -168,49 +270,42 @@ class App {
     x.preventDefault();
     this._clearValues();
     this.newPostWindow.classList.remove("hidden");
-    this.overlay.classList.remove("hidden");
+    this.#overlay.classList.remove("hidden");
     this.newPostWindow.scrollIntoView({
       block: "center",
       behavior: "auto",
       inline: "start",
     });
-
-    //  , {
-    //     once: true,
-    //   });
   }
 
-  _deletePost(x) {
+  #deletePost(x) {
     if (!x.target.classList.contains("delete-btn")) return;
-    const deleteIndex = this.activeUser.notes.findIndex((post) => {
+    const deleteIndex = this.#activeUserPost.findIndex((post) => {
       return post.postId === +x.target.previousElementSibling.id;
     });
-    this.activeUser.notes.splice(deleteIndex, 1);
-    this._displayPosts();
-  }
-  #deletePost() {
-    this.#body.addEventListener("click", this._deletePost.bind(this));
+    this.#activeUser.notes.splice(deleteIndex, 1);
+    this.#displayPosts();
   }
 
   _toggleHidden() {
-    this.overlay.classList.toggle("hidden");
+    this.#overlay.classList.toggle("hidden");
     privateContainer.classList.toggle("hidden");
   }
 
   _editPost_() {
     const newtext = document.getElementById("post-edit-msg").value;
     const newTitle = document.getElementById("new-title").value;
-    this.activeUser.notes[+target.id].msg = newtext;
-    this.activeUser.notes[+target.id].title = newTitle;
-    this.overlay.classList.add("hidden");
+    this.#activeUser.notes[+target.id].msg = newtext;
+    this.#activeUser.notes[+target.id].title = newTitle;
+    this.#overlay.classList.add("hidden");
     privateContainer.classList.add("hidden");
-    this._displayPosts();
+    this.#displayPosts();
   }
   _closeModal() {
     const closeModal = document.querySelector(".close-modal");
     closeModal.addEventListener("click", this._toggleHidden.bind(this));
   }
-  _editPost(x) {
+  #editPost(x) {
     this._closeModal();
     if (!x.target.classList.contains("edit-btn")) return;
     target = x.target;
@@ -225,15 +320,8 @@ class App {
     btnSubmit.addEventListener("click", this._editPost_.bind(this));
   }
 
-  editpost() {
-    this.#body.addEventListener("click", this._editPost.bind(this));
-  }
-  _update() {
-    editPost.addEventListener("click", this._displayPosts.bind(this));
-  }
-
-  _getNotes() {
-    this.activeUser.notes.forEach((post) => {
+  _getNotes(where) {
+    this.#activeUserPost.forEach((post) => {
       let html = `<div  class="col-md-6" style="padding-top: 40px;">
                   <div class="h-100 p-5 text-white bg-dark rounded-3">
                       <h2>${post.title}</h2>
@@ -250,7 +338,7 @@ class App {
                       </button>
                   </div>
                 </div>`;
-      noteBody.insertAdjacentHTML("beforeend", html);
+      noteBody.insertAdjacentHTML(where, html);
     });
   }
   randomNumber(max) {
@@ -261,7 +349,7 @@ class App {
   }
 
   getjumbotron() {
-    const post = this.randomPost(this.activeUser.notes);
+    const post = this.randomPost(this.#activeUserPost);
     if (post?.title === undefined) return;
     const html = `<div class="p-5 mb-4 bg-light rounded-3">
     <div class="container-fluid py-5">
@@ -276,11 +364,11 @@ class App {
     noteHead.innerHTML = "";
     noteBody.innerHTML = "";
   }
-  _displayPosts(where = "beforeend") {
+  #displayPosts(where = "beforeend") {
     this._clearnotes();
     this.getjumbotron();
-    this._getNotes();
-    if (this.activeUser.notes.length === 0) {
+    this._getNotes(where);
+    if (this.#activeUserPost.length === 0) {
       noteHead.insertAdjacentHTML(
         where,
         `<div class="p-5 mb-4 bg-light rounded-3">
@@ -299,8 +387,8 @@ class App {
 }
 
 const app = new App();
-const test = new User("username", "password");
-app._addNewUser(test);
+// const test = new User("username", "password");
+// app._addNewUser(test);
 
 // test.createPost(
 //   "1st The fundamentals of Js",

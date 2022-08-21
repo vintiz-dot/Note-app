@@ -74,12 +74,12 @@
 
               <div class="form-floating">
                 <input
-                  type="email"
+                  type="text"
                   class="form-control"
                   id="sign-inUsername"
-                  placeholder="name@example.com"
+                  placeholder="Username"
                 />
-                <label for="floatingInput">Email address</label>
+                <label for="floatingInput">Username</label>
               </div>
               <div class="form-floating">
                 <input
@@ -98,30 +98,39 @@
               >
                 Sign in
               </button>
+              <br />
+              <br />
+              <p style="color: red" id="invalid-id" class="hidden">
+                Invalid Username or Password!
+              </p>
+
+              <p>
+                <a href=""><span id="offer-sign-up">Sign Up</span></a> Instead
+              </p>
             </form>
           </section>
         </div>
 
-        <div class="flex-child green hidden">
-          <section id="sign-up-page">
+        <div id="sign-up-page" class="flex-child green hidden">
+          <section>
             <form>
               <img class="mb-4" src="sign.jpg" alt="" width="72" height="57" />
-              <h1 class="h3 mb-3 fw-normal">Please sign Up</h1>
+              <h1 class="h3 mb-3 fw-normal">Create an Account</h1>
 
               <div class="form-floating">
                 <input
-                  type="email"
+                  type="text"
                   class="form-control"
-                  id="floatingSignupInput"
-                  placeholder="name@example.com"
+                  id="Signup-username"
+                  placeholder="Username"
                 />
-                <label for="floatingInput">Email address</label>
+                <label for="floatingInput">Username</label>
               </div>
               <div class="form-floating">
                 <input
                   type="password"
                   class="form-control"
-                  id="floatingSignupPassword"
+                  id="SignupPassword"
                   placeholder="Password"
                 />
                 <label for="floatingPassword">Password</label>
@@ -132,8 +141,9 @@
                 type="submit"
                 id="signup"
               >
-                Sign Up
-              </button>
+                Sign Up</button
+              ><br /><br />
+              <p style="color: red" id="invalid-id-" class="hidden"></p>
             </form>
           </section>
         </div>
