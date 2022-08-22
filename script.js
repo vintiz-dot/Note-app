@@ -419,19 +419,45 @@ class App {
   }
 
   _getNotes(where) {
-    this.#activeUserPost.forEach((post) => {
+    let white = [`text-dark bg-light`, `btn-outline-dark`];
+    let black = [`text-light bg-dark`, `btn-outline-light`];
+    let style;
+    const stlyeObj = {
+      first: black,
+      second: white,
+    };
+    this.#activeUserPost.forEach((post, index) => {
+      if (index < 2) {
+        index === 0 ? (style = stlyeObj.first) : (style = stlyeObj.second);
+      }
+      if (!index < 2) {
+        if (stlyeObj.first !== stlyeObj.second) {
+          console.log("1 is not 2");
+          style = stlyeObj.second;
+          stlyeObj.first === white
+            ? (stlyeObj.first = black)
+            : (stlyeObj.first = white);
+        }
+        if (stlyeObj.first === stlyeObj.second) {
+          console.log("1 is 2");
+          stlyeObj.second === white ? (style = black) : (style = white);
+          stlyeObj.second === white
+            ? (stlyeObj.second = black)
+            : (stlyeObj.second = white);
+        }
+      }
       let html = `<div  class="col-md-6" style="padding-top: 40px;">
-                  <div class="h-100 p-5 text-dark bg-light rounded-3">
+                  <div class="h-100 p-5 ${style[0]} rounded-3">
                       <h2>${post.title}</h2>
                       <p>${post.msg}</p>
                       <br><br>
                       <p>Created by
                       ${post.author} on ${post.time}.
                       </p>
-                      <button class="edit-btn btn btn-outline-dark" id="${post.postId}" type="button">
+                      <button class="edit-btn btn ${style[1]}" id="${post.postId}" type="button">
                       Edit Post
                       </button>
-                      <button class="delete-btn btn btn-outline-dark" type="button">
+                      <button class="delete-btn btn ${style[1]}" type="button">
                       Delete Post
                       </button>
                   </div>
