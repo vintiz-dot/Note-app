@@ -47,8 +47,7 @@ class User {
     });
   }
 }
-// let username;
-// let password;
+
 class App {
   #invalid_login = document.getElementById("invalid-id");
   #invalid = document.getElementById("invalid-id-");
@@ -66,6 +65,7 @@ class App {
   #navBar = document.getElementById("nav-bar");
   #users = [];
   #activeUserPost = [];
+  #postEdit;
   #activeUser;
 
   constructor() {
@@ -91,12 +91,12 @@ class App {
 
     // gaurd for valid inputs
     if (
-      username.value === NaN ||
+      username.value === "" ||
       username.value === undefined ||
       username.value === null ||
       password.value.length < 7
     ) {
-      this.#invalidMsg("invaid entries");
+      this.#invalidMsg("invalid entries");
       return;
     }
 
@@ -134,18 +134,17 @@ class App {
     const password = document.getElementById("sign-inPassword");
 
     this.#invalid_login?.classList.add("hidden");
+    const user = this._findUser(username.value);
 
     //check if the username exists
-    if (!this._findUser(username.value)) {
+    if (!user) {
       this.#invalid_login.classList.remove("hidden");
       username.value = password.value = "";
       return;
     }
 
-    const user = this._findUser(username.value)[0];
-
     // check if the username and pass words match
-    if (user.password != password.value) {
+    if (user.password !== password.value) {
       this.#invalid_login.classList.remove("hidden");
       username.value = password.value = " ";
       return;
@@ -233,6 +232,11 @@ class App {
       inline: "start",
     });
     this._clearValues();
+    this.#postEdit = this.#findPost(+target.id);
+    const newtext = document.getElementById("post-edit-msg");
+    const newTitle = document.getElementById("new-title");
+    newTitle.value = this.#postEdit.title;
+    newtext.value = this.#postEdit.msg;
     btnSubmit.addEventListener("click", this._editPost_.bind(this));
   }
 
@@ -273,10 +277,10 @@ class App {
   #findPost(postId) {
     return this.#activeUserPost.find((post) => post.postId === postId);
   }
+
+  //change to find and not filter
   _findUser(username) {
-    return this.#users.filter((user) => user.username === username).length === 0
-      ? false
-      : this.#users.filter((user) => user.username === username);
+    return this.#users.find((user) => user.username === username);
   }
 
   #loadSignupPage() {
@@ -349,10 +353,10 @@ class App {
   }
 
   _editPost_() {
-    const newtext = document.getElementById("post-edit-msg").value;
-    const newTitle = document.getElementById("new-title").value;
-    this.#activeUser.notes[+target.id].msg = newtext;
-    this.#activeUser.notes[+target.id].title = newTitle;
+    const newtext = document.getElementById("post-edit-msg");
+    const newTitle = document.getElementById("new-title");
+    this.#postEdit.msg = newtext.value;
+    this.#postEdit.title = newTitle.value;
     this.#overlay.classList.add("hidden");
     privateContainer.classList.add("hidden");
     this.#displayPosts();
@@ -417,17 +421,17 @@ class App {
   _getNotes(where) {
     this.#activeUserPost.forEach((post) => {
       let html = `<div  class="col-md-6" style="padding-top: 40px;">
-                  <div class="h-100 p-5 text-white bg-dark rounded-3">
+                  <div class="h-100 p-5 text-dark bg-light rounded-3">
                       <h2>${post.title}</h2>
                       <p>${post.msg}</p>
                       <br><br>
                       <p>Created by
                       ${post.author} on ${post.time}.
                       </p>
-                      <button class="edit-btn btn btn-outline-light" id="${post.postId}" type="button">
+                      <button class="edit-btn btn btn-outline-dark" id="${post.postId}" type="button">
                       Edit Post
                       </button>
-                      <button class="delete-btn btn btn-outline-light" type="button">
+                      <button class="delete-btn btn btn-outline-dark" type="button">
                       Delete Post
                       </button>
                   </div>
